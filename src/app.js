@@ -9,6 +9,7 @@ const { coursesRouter } = require('./routes/courses.router');
 const initializePassport = require('./config/passport.config');
 const passport = require('passport');
 const { sessionsRouter } = require('./routes/sessions.router');
+const session = require('express-session');
 
 
 //*---database connection--//
@@ -22,6 +23,12 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine','handlebars')
 
 //*--middlewares --*//
+app.use(session({
+    secret:'sessionSecret',
+    resave: false,
+    saveUninitialized: false,
+}))
+
 initializePassport()
 app.use(passport.initialize())
 

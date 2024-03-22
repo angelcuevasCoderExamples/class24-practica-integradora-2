@@ -5,7 +5,6 @@ const router = Router();
 
 router.post('/register', 
     passport.authenticate('register',{
-        session:false, 
         failureRedirect:'/api/sessions/failedRegister'
     }),
     (req, res)=>{
@@ -20,12 +19,18 @@ router.get('/failedRegister',(req, res)=>{
 
 router.post('/login', 
     passport.authenticate('login',{
-        session:false, 
         failureRedirect:'/api/sessions/failedLogin'
     }),
     (req, res)=>{
-        const user = req.user; 
-        res.send({status:'success', message:'User logged successfuly',payload: user})
+        const {_id, first_name, last_name, role, email} = req.user; 
+        req.session.user = {
+            id: _id, 
+            first_name,
+            last_name,
+            role, 
+            email
+        }
+        res.send({status:'success', message:'User logged successfuly'})
     })
 
 router.get('/failedLogin',(req, res)=>{

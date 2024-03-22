@@ -9,8 +9,7 @@ const initializePassport = ()=>{
     
     passport.use('register', new local.Strategy({
         passReqToCallback: true, 
-        usernameField: 'email',
-        session: false
+        usernameField: 'email'
     }, async (req, email, password, done)=>{
         try {
             
@@ -39,8 +38,7 @@ const initializePassport = ()=>{
 
 
     passport.use('login', new local.Strategy({
-        usernameField: 'email',
-        session: false
+        usernameField: 'email'
     }, async (email, password, done)=>{
         try {            
             const user = await usersManager.getBy({email});
