@@ -19,7 +19,7 @@ class Users {
     }
 
     async getBy(params){
-        let result = await UserModel.find(params).populate('courses').lean()
+        let result = await UserModel.findOne(params).populate('courses').lean()
         return result; 
     }
 

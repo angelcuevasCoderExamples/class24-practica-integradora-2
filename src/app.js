@@ -6,6 +6,9 @@ const viewsRouter = require('./routes/views.router')
 const handlebars = require('express-handlebars')
 const mongoose = require('mongoose');
 const { coursesRouter } = require('./routes/courses.router');
+const initializePassport = require('./config/passport.config');
+const passport = require('passport');
+const { sessionsRouter } = require('./routes/sessions.router');
 
 
 //*---database connection--//
@@ -19,10 +22,14 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine','handlebars')
 
 //*--middlewares --*//
+initializePassport()
+app.use(passport.initialize())
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/api/users', usersRouter)
 app.use('/api/courses', coursesRouter)
+app.use('/api/sessions', sessionsRouter)
 app.use('/', viewsRouter)
 
 
