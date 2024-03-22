@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const router = Router();
 
@@ -24,8 +25,20 @@ router.post('/login',
         failureRedirect:'/api/sessions/failedLogin'
     }),
     (req, res)=>{
-        const user = req.user; 
-        res.send({status:'success', message:'User logged successfuly',payload: user})
+        const {_id, first_name, last_name, dni, role, email} = req.user; 
+        const serializableUser = {
+            _id,
+            first_name,
+            last_name,
+            dni,
+            role,
+            email
+        }
+
+        const token = jwt.sign(serializableUser, 'tokenSecret',{expiresIn:'1h'})
+        res.cookie('coderCookie', token, {maxAge: 60 * 60 * 1000 })
+
+        res.send({status:'success', message:'User logged successfuly',payload: token})
     })
 
 router.get('/failedLogin',(req, res)=>{
